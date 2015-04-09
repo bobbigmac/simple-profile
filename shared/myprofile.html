@@ -1,0 +1,46 @@
+<head>
+	<title>Dev Profile Thingy</title>
+	<link rel="icon" sizes="16x16" href="icons/icon16.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+	{{> homePage}}
+</body>
+
+<template name="homePage">
+	<div class="container container-fluid">
+		<div class="row-fluid">
+			<div class="page-header">
+				<div class="loginPanel">{{loginButtons align="right" }}</div>
+				<h1><a href="{{siteRoot}}">{{siteName}}</a></h1>
+			</div>
+		</div>
+		{{#if ownerId}}
+			<div class="row-fluid">
+				{{> socialLinks}}
+			</div>
+			{{#if ownerLoggedIn}}
+				<div class="row-fluid">
+					<input class="addLinkText" type="text" placeholder="Enter Link">
+					<button class="btn btn-submit addLink">Add Link</a>
+				</div>
+			{{/if}}
+		{{else}}
+			<div class="row-fluid">
+				<h4>Make your profile</h4>
+				<p>Add your links and social profiles, get a quick, slick, realtime (mostly) shareable homepage to all your social/reputation profiles.</p>
+				<p>Built for devs.</p>
+			</div>
+		{{/if}}
+		<p style="text-align: center;margin: 40px auto;"><a href="http://bobdavies.co.uk">Bob Davies</a> or <a href="https://twitter.com/bobbigmac">Bobbigmac</a> on Twitter</p>
+	</div>
+</template>
+
+<template name="socialLinks">
+	{{#each links}}
+		<div class="field">{{url}}</div>
+	{{/each}}
+</template>
