@@ -1,0 +1,72 @@
+
+
+<template name="addCommentForm">
+	<div class="row">
+		<div class="col-xs-12">
+			<form class="add-comment-form">
+		    <div class="input-group">
+		      {{#if editMode}}
+	    			<span class="input-group-btn dropup">
+						  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    <span class="glyphicon glyphicon-option-horizontal"></span>
+						  </button>
+						  <ul class="dropdown-menu pull-left" role="menu">
+			    			<li><a href="#" class="btn rescan-link"><i class="glyphicon glyphicon-repeat"></i> Rescan</a></li>
+			    			<li><a href="#" class="btn private-link"><span class="glyphicon glyphicon-{{#if link.private}}lock{{else}}globe{{/if}}"></span> 
+			    				{{#if link.private}}Private{{else}}Public{{/if}}
+			    			</a></li>
+			    			<li><a href="#" class="btn remove-link"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+						  </ul>
+						</span>
+					{{/if}}
+		      <input type="text" class="form-control add-comment-text" placeholder="What do you think?">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default add-comment-button"><i class="glyphicon glyphicon-plus"></i> Save</button>
+		      </span>
+		    </div>
+		  </form>
+    </div>
+  </div>
+</template>
+
+<template name="comment">
+	<div class="row">
+		<div class="col-xs-12" title="{{created}}">
+			{{#if equals owner currentUser._id}}
+				{{#if either editMode userIsNotOwner}}
+					<button class="btn btn-link pull-right remove-comment"><small><i class="glyphicon glyphicon-remove"></i></small></button>
+				{{/if}}
+			{{/if}}
+			{{#unless equals owner ownerUser._id}}
+				{{> avatar userId=owner shape="circle" size="extra-small" class="pull-left margin-a-bit"}}
+			{{/unless}}
+			<span class="comment-content">
+				{{#if and editMode userIsOwner}}
+					{{> editableText context=this collection="comments" field="text"}}
+				{{else}}
+					{{#if hasOneLink}}
+						<a href="{{firstLink}}" target="_blank">{{delinked}}</a>
+					{{else}}
+						{{#if hasLink}}
+							{{#autolink}}
+								{{text}}
+							{{/autolink}}
+						{{else}}
+							{{text}}
+						{{/if}}
+					{{/if}}
+				{{/if}}
+			</span>
+		</div>
+	</div>
+</template>
+
+<template name="comments">
+	{{#if comments.count}}
+	  <div class="panel-body">
+			{{#each comments}}
+				{{> comment}}
+			{{/each}}
+		</div>
+	{{/if}}
+</template>

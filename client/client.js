@@ -1,65 +1,45 @@
 
-if (Meteor.isClient) {
-	Template.socialLinks.helpers({
-		links: function() {
-			return SocialLinks.find();
-		}
-	});
-	Template.homePage.events({
-		'click button.addLink': function(e, t) {
-			var linkTextEl = t.find('input.addLinkText');
-			var linkText = linkTextEl.value;
-			console.log('adding', linkText);
-			
-			if(linkText) {
-				SocialLinks.insert({
-					url: linkText,
-				}, function(err, id) {
-					console.log('added', linkText, 'got', id, 'err', err);
-				});
-			}
-			else {
-				linkTextEl.focus();
-			}
-		}
-	});
+//TODO: Get this from host-user configuration
+Session.set('brand-name', 'Simple-profile');
 
-	Template.homePage.helpers({
-		ownerLoggedIn: function() {
-			var userId = Meteor.userId();
-			return (userId && userId == Session.get('ownerId'));
-		},
-		ownerId: function() {
-			var user = false, ownerId = false;
-			if(user = Meteor.user())
-			{
-				if(user._id && !Session.get('ownerId'))
-				{
-					Session.set('ownerId', user._id);
-				}
-			}
-			return Session.get('ownerId');
-		},
-		siteRoot: function() {
-			return Meteor.absoluteUrl();
-		},
-		siteName: function() {
-			//TODO: Use to subscribe to owner data if not logged in.
-			var user = Meteor.user();
-			if(user)
-			{
-				var siteName = user.fullname || user.username || "Dev Profile";
-				document.title = siteName;
-				return siteName;
-			}
-		}
-	});
-	
-	Meteor.autorun(function () {
-		Meteor.subscribe('feedSocialLinks', Session.get('ownerId'));
-	});
-  
-	Accounts.ui.config({
-		passwordSignupFields: 'USERNAME_AND_EMAIL'
-	});
-}
+Template.nav.helpers({
+	unreadActivities: function() {
+		return Counts.get('unread-activities');
+	}
+});
+
+Template.nav.events({
+	'click .toggle-editmode': function() {
+		var editMode = Session.get('editMode');
+		Session.set('editMode', !editMode);
+	},
+	'click .new-list': function() {
+		Lists.insert({
+			'name': 'New List: '+moment().format('LL'),
+			'public': true
+		});
+	}
+});
+
+Avatar.setOptions({
+	fallbackType: 'initials',
+	gravatarDefault: 'wavatar',
+	emailHashProperty: 'profile.email_hash',
+});
+
+EditableText.userCanEdit = function(doc,Collection) {
+	var userId = Meteor.userId();
+	var owner = Meteor.users.findOne({ 'roles': 'admin' });
+	return !!(userId && owner && userId === owner._id);
+};
+
+Template.layout.helpers({
+	loggingIn: function() {
+		return Meteor.loggingIn();
+	}
+})
+
+Accounts.ui.config({
+	passwordSignupFields: 'USERNAME_AND_EMAIL'
+	// passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
+});

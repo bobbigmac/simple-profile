@@ -1,0 +1,85 @@
+
+
+<template name="imageList">
+	<div class="image-list">
+		{{#each images}}
+			{{#if showIt ../_id ../images}}
+				<img src={{showIt ../_id ../images}} source="{{this}}" class="showable {{#if showing ../_id}}showing{{/if}}">
+			{{/if}}
+		{{/each}}
+		<span class="image-pos">
+			{{imagepos}} / {{images.length}}
+			<span class="glyphicon glyphicon-camera"></span>
+		</span>
+	</div>
+</template>
+
+<template name="link">
+	<div class="masonry-brick link-card {{#if link.archived}}link-archived{{/if}}">
+		<div class="panel {{#if link.archived}}panel-danger{{else}}panel-default{{/if}}">
+			{{#if link.scanned.images.length}}
+	    	<div class="panel-image no-select">
+					{{> imageList images=link.scanned.images url=link.url _id=link._id}}
+					{{#if link.scanned.price}}
+						<span class="price">{{{link.scanned.price}}}</span>
+					{{/if}}
+				</div>
+			{{else}}
+				{{#if link.image}}
+		    	<div class="panel-image no-select">
+						<img src="{{link.image}}" alt="{{link.title}}" class="single-image" />
+						{{#if link.scanned.price}}
+							<span class="price">{{{link.scanned.price}}}</span>
+						{{/if}}
+		    	</div>
+				{{/if}}
+			{{/if}}
+	    <div class="panel-heading no-select">
+      	<h4>
+					<a href="{{link.url}}" target="_blank">
+						{{eitherMaxLength link.title link.url 80}}
+	        </a>
+				</h4>
+	    </div>
+	    {{#if showShare}}
+	    	{{> sharePanelBody}}
+	    {{/if}}
+		  {{> comments}}
+			<!-- {{#if and editMode userIsOwner}}
+	    	<div class="panel-footer text-center">
+		    	<div class="btn-group" role="group">
+	    			<button class="btn btn-default rescan-link"><i class="glyphicon glyphicon-repeat"></i></button>
+	    			<button class="btn btn-default archive-link"><i class="glyphicon glyphicon-trash"></i> 
+	    				{{#if link.archived}}Unarchive{{else}}Archive{{/if}}
+	    			</button>
+	    			<button class="btn btn-default private-link"><span class="glyphicon glyphicon-{{#if link.private}}lock{{else}}globe{{/if}}"></span> 
+	    				{{#if link.private}}Private{{else}}Public{{/if}}
+	    			</button>
+	    			<button href="#" class="btn btn-default remove-link"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+			    </div>
+			  </div>
+	    {{/if}} -->
+	    {{#if currentUser}}
+	    	<div class="panel-footer">
+	    		{{> addCommentForm}}
+	    	</div>
+	    {{/if}}
+	  </div>
+	</div>
+</template>
+
+<template name="sharePanelBody">
+  <div class="panel-body">
+  	<div class="input-group">
+    	<input type="text" readonly class="form-control share-input" value="{{shareUrl}}" />
+    	<span class="input-group-btn">
+    		<a href="{{shareify 'facebook' shareUrl}}" class="btn btn-default" target="_blank">
+    			<span class="fa fa-facebook-official"></span>
+    		</a>
+    		<a href="{{shareify 'twitter' shareUrl}}" class="btn btn-default" target="_blank">
+    			<span class="fa fa-twitter-square"></span>
+    		</a>
+    	</span>
+  	</div>
+  </div>
+</template>

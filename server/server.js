@@ -1,45 +1,61 @@
 
+Meteor.startup(function () {
+  //Ensure all users have email_hash
+  Meteor.users.find({
+    $or: [
+      { 'profile.email_hash': { $exists: false } },
+      { 'profile.email_hash': null }
+    ],
+    emails: { $exists: true }
+  }, {
+    fields: { _id: 1, emails: 1, 'profile.email_hash': 1 }
+  }).fetch().forEach(function(user) {
+    var hash = Gravatar.hash(user.emails[0].address);
+    console.log('Creating gravatar hash', user._id, hash);
+    Meteor.users.update({ _id: user._id }, { $set: {
+      'profile.email_hash': hash
+    }});
+  });
 
-if (Meteor.isServer) {
-	Meteor.startup(function () {
-		
-		SocialLinks.deny({
-			insert: function (userId, doc) {
-				doc.creator = userId;
-			},
-			update: function (userId, doc, fields, modifier) {
-				if(userId !== doc.creator) {
-					return true;
-				}
-			},
-			remove: function (userId, doc) {
-				if(userId !== doc.creator) {
-					return true;
-				}
-			},
-			fetch: ['_id', 'creator']
-		});
-		
-		SocialEntries.deny({
-		});
-		
-		Meteor.methods({
-		});
-		
-		Meteor.publish('feedSocialLinks', function(filter) {
-			if(filter)
-			{
-				console.log('filtering social links', filter);
-			}
-			return SocialLinks.find({}, { order: { dateAdded: -1 } });
-		});
-		
-		Accounts.validateNewUser(function (user) {
-			blackListNames = ['root', 'admin', 'master', 'administrator', 'home'];
-			if(user.username && user.username.length >= 5 && blackListNames.indexOf(user.username) > -1) {
-				return true;
-			}
-			throw new Meteor.Error(403, "Username must have at least 5 characters");
-		});
-	});
-}
+  //Reset scanning on any halted links
+  Links.update({ scanning: true, scanned: { $exists: false }}, { $unset: { scanning: "" } }, { multi: true });
+
+	//Clean out any Lists with no Links
+  Lists.find({}, { fields: { _id: 1, name: 1 }})
+  	.fetch()
+  	.forEach(function(list) {
+
+  	var links = Links.find({ list: list._id });
+  	if(!links.count()) {
+  		console.log('Removing empty list', list.name);
+  		Lists.remove({ _id: list._id });
+  	}
+  });
+
+  var defaultAdmins = ['admin@bobbigmac.com', 'bobbigmac'];
+  defaultAdmins.forEach(function(defaultAdmin) {
+    var user = Meteor.users.findOne({
+      $or: [
+        { 'emails.address': defaultAdmin }, 
+        { 'username': defaultAdmin }
+      ]
+    });
+    if(user && user._id) {
+      if(!Roles.userIsInRole(user, 'admin')) {
+        console.log('Assigning', defaultAdmin, 'to admin role');
+        Roles.addUsersToRoles(user._id, 'admin');
+      }
+    }
+  });
+  
+  Meteor.methods({
+    'rescan-link': function(linkId) {
+      Links.update({ _id: linkId }, {
+        $unset: { 
+          scanned: "", 
+          scanning: "" 
+        }
+      });
+    }
+  });
+});

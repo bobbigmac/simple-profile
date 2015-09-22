@@ -1,0 +1,67 @@
+
+<template name="activities">
+	{{#if currentUser.profile.subscriptions.length}}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="panel-title">
+					You're subscribed to {{currentUser.profile.subscriptions.length}} lists.
+				</div>
+			</div>
+			<table class="table table-default">
+				<thead>
+					<tr>
+						<th>List</th>
+						<th>Link</th>
+						<th></th>
+						<th>Activities</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each collated}}
+						<tr>
+							{{#with this.list}}
+								<td><a href="{{pathFor 'list' _id=this}}">{{listName this}}</a></td>
+							{{/with}}
+							<td>
+								<a href="{{pathFor 'list' _id=this.list link=this.link}}">
+									{{linkTitle this.link}}
+								</a>
+							</td>
+							<td>{{> avatar userId=this.user shape="circle" size="small"}}</td>
+							<td class="table-wrapper">
+								<table class="table table-default">
+									<tbody>
+										{{#each this.activities}}
+											<tr>
+												<td>{{liveMomentAgo this.created}}</td>
+												<td>{{this.subject}}</td>
+												<td>{{this.action}}</td>
+												<td>{{this.meta}}</td>
+											</tr>
+										{{/each}}
+									</tbody>
+								</table>
+							</td>
+							<td>
+								<button class="btn btn-link mark-read" title="Mark as read all before {{momentAgo this.created}}">
+									<i class="fa fa-history"></i>
+								</button>
+							</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			{{#if currentUser.profile.readUntil}}
+				<div class="panel-footer">
+					<button class="btn btn-default reset-read">
+						<i class="fa fa-history"></i>
+						View All Recent Activity
+					</button>
+				</div>
+			{{/if}}
+		</div>
+	{{else}}
+		<div class="alert alert-warning" role="alert">You're not subscribed <a href="{{pathFor 'lists'}}">to any lists</a>.</div>
+	{{/if}}
+</template>

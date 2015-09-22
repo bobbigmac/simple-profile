@@ -1,0 +1,30 @@
+<head>
+  <title></title>
+  <link rel="icon" sizes="16x16" href="/favicon.ico?v=2">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+</body>
+
+<template name="layout">
+	{{pageTitle}}
+	{{>nav}}
+	<div class="container-fluid">
+	  <div class="row">
+	    <div class="col-sm-12">
+	    	{{>yield}}
+	    </div>
+	  </div>
+		{{#if loggingIn}}
+			Logging in user or loading route data (debug message, ignore)
+		{{/if}}
+	</div>
+</template>
+
+<template name="loading">
+	Loading...
+</template>
+
+<template name="notFound">
+	Not found!
+</template>
