@@ -9,7 +9,17 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">{{brand}}</a>
+        {{#if and userIsOwner editMode}}
+          {{> avatar userId=ownerUser._id shape="circle" size="navbar" class="pull-left editing-navbar-avatar"}}
+          <span class="navbar-brand">
+            {{> editableText context=ownerUser collection="users" field="profile.brand" substitute=brand acceptEmpty=true options=bootstrapify}}
+          </span>
+        {{else}}
+          <a class="navbar-brand" href="{{pathFor 'lists'}}">
+            {{> avatar userId=ownerUser._id shape="circle" size="navbar" class="pull-left navbar-avatar"}} 
+            {{either ownerUser.profile.brand brand}}
+          </a>
+        {{/if}}
       </div>
 
       <div id="navbar" class="navbar-collapse collapse">
@@ -32,6 +42,7 @@
           {{/if}}
         </ul>
         <ul class="nav navbar-nav navbar-right">
+          {{#if userIsOwner}}
             <li>
               <a class="btn btn-link" href="{{pathFor 'activities'}}">
                 <i class="glyphicon glyphicon-list-alt"></i>
@@ -41,7 +52,11 @@
                 {{/if}}
               </a>
             </li>
+          {{/if}}
         	{{> loginButtons}}
+          {{#if currentUser}}
+            {{> avatar userId=currentUser._id size="navbar" shape="circle" class="pull-right login-avatar"}}
+          {{/if}}
         </ul>
       </div>
     </div>

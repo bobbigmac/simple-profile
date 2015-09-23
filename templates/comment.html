@@ -32,17 +32,15 @@
 <template name="comment">
 	<div class="row">
 		<div class="col-xs-12" title="{{created}}">
-			{{#if equals owner currentUser._id}}
-				{{#if either editMode userIsNotOwner}}
-					<button class="btn btn-link pull-right remove-comment"><small><i class="glyphicon glyphicon-remove"></i></small></button>
-				{{/if}}
+			{{#if mayRemove}}
+				<button class="btn btn-link pull-right remove-comment"><small><i class="glyphicon glyphicon-remove"></i></small></button>
 			{{/if}}
 			{{#unless equals owner ownerUser._id}}
 				{{> avatar userId=owner shape="circle" size="extra-small" class="pull-left margin-a-bit"}}
 			{{/unless}}
 			<span class="comment-content">
 				{{#if and editMode userIsOwner}}
-					{{> editableText context=this collection="comments" field="text"}}
+					{{> editableText context=this collection="comments" field="text" options=bootstrapify}}
 				{{else}}
 					{{#if hasOneLink}}
 						<a href="{{firstLink}}" target="_blank">{{delinked}}</a>

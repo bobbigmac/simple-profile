@@ -2,6 +2,13 @@ var settings = ((Meteor.settings && Meteor.settings.public) || {});
 
 Session.setDefault('brand-name', settings.brand||'Loading...');
 
+Handlebars.registerHelper('bootstrapify', function() {
+	return {
+		//'class': 'input-group',
+		'inputClass': 'form-control'
+	}
+});
+
 Handlebars.registerHelper('brand', function() {
 	return Session.get('brand-name');
 });

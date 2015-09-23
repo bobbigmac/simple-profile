@@ -18,11 +18,14 @@ Comments.permit('insert')
 	.log(['link', 'comment', setMetaCommentAdded])
 	.apply();
 
-// Comments.permit('update')
-// 	.ifHasRole('basic')
-// 	.onlyProps(['likes'])
-// 	.valueIsLoggedInUser()
-// 	.apply();
+Comments.permit('update')
+	.ifHasRole('basic')
+	.ownerIsLoggedInUser()
+	.apply();
+
+Comments.permit('update')
+	.ifHasRole('admin')
+	.apply();
 
 Comments.permit('remove')
 	.ownerIsLoggedInUser()

@@ -25,6 +25,12 @@ Avatar.setOptions({
 	fallbackType: 'initials',
 	gravatarDefault: 'wavatar',
 	emailHashProperty: 'profile.email_hash',
+	imageSizes: {
+		'large': 80,
+		'small': 30,
+		'extra-small': 20,
+		'navbar': 40,
+	}
 });
 
 EditableText.userCanEdit = function(doc,Collection) {

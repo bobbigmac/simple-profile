@@ -15,7 +15,8 @@ Router.route('/activity', {
 	name: 'activities',
 	waitOn: function() {
 		return [
-			currentUser
+			currentUser,
+			Meteor.subscribe('owner'),
 		];
 	},
 	data: function() {
@@ -26,16 +27,16 @@ Router.route('/activity', {
 		Tracker.autorun(function () {
 			var filter = {};
 			var user = Meteor.user();
-			var subscriptions = Lists.find().fetch().map(function(list) {
+			var listIds = Lists.find().fetch().map(function(list) {
 				return list._id;
 			});
 			var readUntil = (user && user.profile && user.profile.readUntil);
-			
-			Session.set('page-title', subscriptions.length+' subscriptions');
+
+			Session.set('page-title', listIds.length+' lists');
 
 			//TODO: Subscribe to all owned lists by default.
-			Meteor.subscribe('activities', subscriptions, readUntil);
-			Meteor.subscribe('unread-activities-count', subscriptions, readUntil);
+			Meteor.subscribe('activities', readUntil);
+			Meteor.subscribe('unread-activities-count', readUntil);
 
 			var owners = {};
 			var lists = {};
@@ -77,15 +78,28 @@ Router.route('/', {
 
 		var filter = {};
 
-		var lists = Lists.find(filter, { sort: { order: 1 }});
+		var listsCursor = Lists.find(filter, { sort: { order: 1 }});
 		Tracker.autorun(function() {
-			commentIds = Links.find().fetch().map(function(link) {
+
+			var user = Meteor.user();
+
+			linkIds = Links.find().fetch().map(function(link) {
 				return link._id;
 			});
-			Meteor.subscribe('link-comments', commentIds);
+
+			Meteor.subscribe('link-comments', linkIds);
+			Meteor.subscribe('unread-activities-count', user && user.profile && user.profile.readUntil);
+
+			var commentOwners = {};
+			Comments.find().fetch().map(function(comment) { 
+				commentOwners[comment.owner] = true; 
+				return comment.owner;
+			});
+
+			Meteor.subscribe('owners', Object.keys(commentOwners));
 		});
 
-		return lists;
+		return listsCursor;
 	},
   fastRender: true
 });

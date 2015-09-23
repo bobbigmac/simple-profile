@@ -14,19 +14,31 @@ var getActivitiesCursor = function(listIds, readUntil) {
 	}
 };
 
-Meteor.publish('unread-activities-count', function(listIds, readUntil) {
-	var activitiesCursor = getActivitiesCursor(listIds, readUntil);
-	if(activitiesCursor) {
-		var res = Counts.publish(this, 'unread-activities', activitiesCursor);
+Meteor.publish('unread-activities-count', function(readUntil) {
+	if(Roles.userIsInRole(this.userId, ['admin'])) {
+		var listIds = Lists.find({}, { fields: { _id: 1 }}).fetch().map(function(list) {
+			return list._id;
+		});
+
+		var activitiesCursor = getActivitiesCursor(listIds, readUntil);
+		if(activitiesCursor) {
+			var res = Counts.publish(this, 'unread-activities', activitiesCursor);
+		}
 	}
 	this.ready();
 	return;
 });
 
-Meteor.publish('activities', function(listIds, readUntil) {
-	var activitiesCursor = getActivitiesCursor(listIds, readUntil);
-	if(activitiesCursor) {
-		return activitiesCursor;
+Meteor.publish('activities', function(readUntil) {
+	if(Roles.userIsInRole(this.userId, ['admin'])) {
+		var listIds = Lists.find({}, { fields: { _id: 1 }}).fetch().map(function(list) {
+			return list._id;
+		});
+		
+		var activitiesCursor = getActivitiesCursor(listIds, readUntil);
+		if(activitiesCursor) {
+			return activitiesCursor;
+		}
 	}
 	this.ready();
 	return;

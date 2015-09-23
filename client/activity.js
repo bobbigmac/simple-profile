@@ -1,4 +1,8 @@
 
+Template.activities.onRendered(function() {
+	Session.set('editMode', false);
+});
+
 Template.activities.events({
 	'click .mark-read': function(event, template) {
 		var userId = Meteor.userId();

@@ -30,11 +30,26 @@ Template.comment.helpers({
 	firstLink: function() {
 		var links = getUrlsFromText(this.text);
 		return (links && links[0]);
-	}
+	},
+	'mayRemove': function() {
+		var userId = Meteor.userId();
+		var ownerUser = Meteor.users.findOne({ 'roles': 'admin' });
+		var editMode = Session.get('editMode');
+
+		return (editMode && ownerUser._id === userId) || (this.owner === userId && ownerUser._id != userId);
+	},
 });
 
 Template.comment.events({
 	'click .remove-comment': function(event, template) {
-		Comments.remove({ _id: this._id });
+		var userId = Meteor.userId();
+		var ownerUser = Meteor.users.findOne({ 'roles': 'admin' });
+		var editMode = Session.get('editMode');
+
+		if(this.owner === userId) {
+			Comments.remove({ _id: this._id });
+		} else if(editMode && ownerUser._id === userId) {
+			Comments.update(this._id, { $set: { archived: !this.archived }});
+		}
 	}
 });

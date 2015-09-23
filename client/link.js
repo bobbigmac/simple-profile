@@ -8,15 +8,6 @@ Template.link.helpers({
 		var userId = Meteor.userId();
 		return userId && Roles.userIsInRole(userId, ['admin']);
 	},
-	'liked': function() {
-		var userId = Meteor.userId();
-		var link = this.link;
-		var liked = link && link.likes && link.likes.general && link.likes.general.indexOf && link.likes.general.indexOf(userId) > -1;
-		return liked;
-	},
-	'likes': function() {
-		return this.link && this.link.likes && this.link.likes.general && this.link.likes.general.length;
-	},
 	showShare: function() {
 		return Session.equals('share-link-visible', this.link._id);
 	}
@@ -37,12 +28,12 @@ Template.link.events({
 	},
 	'click .archive-link': function(event, template) {
 		Links.update({ _id: this.link._id }, {
-			$set: { archived: !!!this.link.archived }
+			$set: { archived: !this.link.archived }
 		});
 	},
 	'click .private-link': function(event, template) {
 		Links.update({ _id: this.link._id }, {
-			$set: { private: !!!this.link.private }
+			$set: { private: !this.link.private }
 		});
 	},
 	'click .remove-link': function(event, template) {

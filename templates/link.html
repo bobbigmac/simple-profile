@@ -45,20 +45,6 @@
 	    	{{> sharePanelBody}}
 	    {{/if}}
 		  {{> comments}}
-			<!-- {{#if and editMode userIsOwner}}
-	    	<div class="panel-footer text-center">
-		    	<div class="btn-group" role="group">
-	    			<button class="btn btn-default rescan-link"><i class="glyphicon glyphicon-repeat"></i></button>
-	    			<button class="btn btn-default archive-link"><i class="glyphicon glyphicon-trash"></i> 
-	    				{{#if link.archived}}Unarchive{{else}}Archive{{/if}}
-	    			</button>
-	    			<button class="btn btn-default private-link"><span class="glyphicon glyphicon-{{#if link.private}}lock{{else}}globe{{/if}}"></span> 
-	    				{{#if link.private}}Private{{else}}Public{{/if}}
-	    			</button>
-	    			<button href="#" class="btn btn-default remove-link"><span class="glyphicon glyphicon-remove"></span> Delete</button>
-			    </div>
-			  </div>
-	    {{/if}} -->
 	    {{#if currentUser}}
 	    	<div class="panel-footer">
 	    		{{> addCommentForm}}
