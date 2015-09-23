@@ -1,15 +1,16 @@
 
 <template name="lists">
-	{{#unless currentUser}}
-		<div class="container">
-			<div class="alert alert-warning">Register to comment or ask questions.</div>
-		</div>
-	{{/unless}}
 	<div class="container-fluid">
 		{{#each this}}
 			{{> list}}
 		{{/each}}
 	</div>
+	{{#unless currentUser}}
+		<div class="container">
+			<!-- <div class="alert alert-warning">Register to comment, ask questions (or maybe even subscribe for updates).</div> -->
+			<div class="alert alert-warning">Register to comment or ask questions.</div>
+		</div>
+	{{/unless}}
 </template>
 
 <template name="list">

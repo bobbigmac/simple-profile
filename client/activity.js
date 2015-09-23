@@ -68,7 +68,6 @@ Template.activities.helpers({
 			}
 			items[items.length-1].activities.push(subItem);
 		});
-		//console.log(items);
 		return items;
 	}
 });

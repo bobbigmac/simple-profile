@@ -13,7 +13,6 @@ Template.comment.helpers({
 	},
 	hasOneLink: function() {
 		var links = getUrlsFromText(this.text);
-		//console.log(links);
 		return (links && links.length === 1);
 	},
 	linked: function() {
