@@ -2,6 +2,8 @@
 //TODO: Get this from host-user configuration
 Session.set('brand-name', 'Simple-profile');
 
+Template.nav.onRendered(initBootstrapJs);
+
 Template.nav.helpers({
 	unreadActivities: function() {
 		return Counts.get('unread-activities');

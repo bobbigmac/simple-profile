@@ -30,6 +30,7 @@ Template.addLinkForm.events({
 	}
 });
 
+Template.linkOptions.onRendered(initBootstrapJs);
 Template.list.onRendered(function() {
 	Session.set('confirm-remove-list', false);
 });

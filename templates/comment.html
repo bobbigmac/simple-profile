@@ -1,27 +1,31 @@
 
 
+<template name="linkOptions">
+	<span class="input-group-btn dropup">
+	  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    <span class="glyphicon glyphicon-option-horizontal"></span>
+	  </button>
+	  <ul class="dropdown-menu pull-left" role="menu">
+			<li><a href="#" class="btn rescan-link"><i class="glyphicon glyphicon-repeat"></i> Rescan</a></li>
+			<li><a href="#" class="btn private-link"><span class="glyphicon glyphicon-{{#if link.private}}lock{{else}}globe{{/if}}"></span> 
+				{{#if link.private}}Private{{else}}Public{{/if}}
+			</a></li>
+			<li><a href="#" class="btn remove-link"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+	  </ul>
+	</span>
+</template>
+
 <template name="addCommentForm">
 	<div class="row">
 		<div class="col-xs-12">
 			<form class="add-comment-form">
 		    <div class="input-group">
 		      {{#if editMode}}
-	    			<span class="input-group-btn dropup">
-						  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						    <span class="glyphicon glyphicon-option-horizontal"></span>
-						  </button>
-						  <ul class="dropdown-menu pull-left" role="menu">
-			    			<li><a href="#" class="btn rescan-link"><i class="glyphicon glyphicon-repeat"></i> Rescan</a></li>
-			    			<li><a href="#" class="btn private-link"><span class="glyphicon glyphicon-{{#if link.private}}lock{{else}}globe{{/if}}"></span> 
-			    				{{#if link.private}}Private{{else}}Public{{/if}}
-			    			</a></li>
-			    			<li><a href="#" class="btn remove-link"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
-						  </ul>
-						</span>
+		      	{{> linkOptions}}
 					{{/if}}
 		      <input type="text" class="form-control add-comment-text" placeholder="What do you think?">
 		      <span class="input-group-btn">
-		        <button class="btn btn-default add-comment-button"><i class="glyphicon glyphicon-plus"></i> Save</button>
+		        <button class="btn btn-default add-comment-button"><i class="glyphicon glyphicon-plus"></i> Add</button>
 		      </span>
 		    </div>
 		  </form>
