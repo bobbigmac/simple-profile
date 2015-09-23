@@ -1,7 +1,7 @@
 
-//TODO: Get this from host-user configuration
-Session.set('brand-name', 'Simple-profile');
+Session.setDefault('brand-name', 'Loading...');
 
+//Template.loginButtons.onRendered(initBootstrapJs);
 Template.nav.onRendered(initBootstrapJs);
 
 Template.nav.helpers({

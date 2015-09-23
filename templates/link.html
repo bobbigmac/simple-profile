@@ -17,29 +17,27 @@
 <template name="link">
 	<div class="masonry-brick link-card {{#if link.archived}}link-archived{{/if}}">
 		<div class="panel {{#if link.archived}}panel-danger{{else}}panel-default{{/if}}">
-			{{#if link.scanned.images.length}}
+			{{#if link.images.length}}
 	    	<div class="panel-image no-select">
-					{{> imageList images=link.scanned.images url=link.url _id=link._id}}
-					{{#if link.scanned.price}}
-						<span class="price">{{{link.scanned.price}}}</span>
-					{{/if}}
+					{{> imageList images=link.images url=link.url _id=link._id}}
 				</div>
 			{{else}}
 				{{#if link.image}}
 		    	<div class="panel-image no-select">
 						<img src="{{link.image}}" alt="{{link.title}}" class="single-image" />
-						{{#if link.scanned.price}}
-							<span class="price">{{{link.scanned.price}}}</span>
-						{{/if}}
 		    	</div>
 				{{/if}}
 			{{/if}}
 	    <div class="panel-heading no-select">
-      	<h4>
+				{{#if and userIsOwner editMode}}
+					{{> editableText context=link collection="links" field="title" substitute=link.url acceptEmpty=true options=bootstrapify}}
+				{{else}}
 					<a href="{{link.url}}" target="_blank">
-						{{eitherMaxLength link.title link.url 80}}
-	        </a>
-				</h4>
+      			<h4>
+							{{eitherMaxLength link.title link.url 80}}
+						</h4>
+      		</a>
+				{{/if}}
 	    </div>
 	    {{#if showShare}}
 	    	{{> sharePanelBody}}

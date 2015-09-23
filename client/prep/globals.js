@@ -1,7 +1,7 @@
 initBootstrapJs = function() {
-  this.$('[data-toggle="dropdown"]').dropdown();
-  this.$('[data-toggle="tooltip"]').tooltip();
-  this.$('[data-toggle="popover"]').popover();
+  $('[data-toggle="dropdown"]').dropdown();
+  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="popover"]').popover();
 };
 
 var urlRegex =/(\b((https?|ftp|file):\/\/)?[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/igm;

@@ -1,11 +1,11 @@
 
 <template name="lists">
+	{{#unless currentUser}}
+		<div class="container">
+			<div class="alert alert-warning">Register to comment or ask questions.</div>
+		</div>
+	{{/unless}}
 	<div class="container-fluid">
-		<!-- {{#unless currentUser}}
-			<div class="masonry-brick">
-				<div class="alert alert-warning">Register/Login to create your own lists and comment on others.</div>
-			</div>
-		{{/unless}} -->
 		{{#each this}}
 			{{> list}}
 		{{/each}}
@@ -17,13 +17,13 @@
 		<div class="panel panel-default">
 			{{#if name}}
 				<div class="panel-heading">
-					<h2 class="panel-title">
+					<h3 class="panel-title">
 						{{#if and userIsOwner editMode}}
 							{{> editableText context=this collection="lists" field="name" options=bootstrapify}}
 						{{else}}
 							{{this.name}}
 						{{/if}}
-					</h2>
+					</h3>
 				</div>
 			{{/if}}
 			<div class="panel-body">
