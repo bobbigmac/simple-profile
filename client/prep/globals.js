@@ -111,6 +111,30 @@ sessionObjectProperty = function(name, property, newValue) {
 	}
 };
 
+uploadImage = function(file, linkId) {
+	if(file && linkId) {
+		Images.insert(file, function (err, fileObj) {
+			if (err){
+				console.error(err);
+			} else {
+				var fileRecord = fileObj.getFileRecord();
+				if(fileRecord) {
+					var imageRecord = { _id: fileRecord._id };
+					Links.update(linkId, {
+						$addToSet: {
+							images: imageRecord
+						}
+					}, function() {
+						Meteor.setTimeout(function() {
+							sessionObjectProperty('displayedImage', linkId, getImageUrl(imageRecord));
+						}, 500);
+					});
+				}
+			}
+		});
+	}
+};
+
 removeImage = function(imageId, linkId) {
 	if(imageId && linkId) {
 		Links.update(linkId, {

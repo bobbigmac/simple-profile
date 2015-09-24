@@ -176,6 +176,34 @@ Template.addCommentForm.events({
 			Comments.insert({ link: linkId, text: text });
 			template.find('.add-comment-text').value = '';
 		}
+	},
+	'paste .add-comment-text': function(event, template) {
+    var userId = Meteor.userId();
+    if(userId && Roles.userIsInRole(userId, ['admin'])) {
+
+			var linkId = this.link && this.link._id;
+			var clipboardData = event && event.originalEvent && event.originalEvent.clipboardData;
+	    var matchType = /image.*/;
+
+	    if(linkId && clipboardData) {
+	    	var found = false;
+
+	    	Array.prototype.forEach.call(clipboardData.types, function(type, i) {
+	        if (found) {
+	          return;
+	        }
+	        var file, reader;
+	        if(type.match(matchType) || clipboardData.items[i].type.match(matchType)) {
+	          file = clipboardData.items[i].getAsFile();
+
+	          if(file) {
+		          uploadImage(file, linkId);
+	          	return (found = true);
+		        }
+	        }
+	      });
+    	}
+    }
 	}
 });
 
