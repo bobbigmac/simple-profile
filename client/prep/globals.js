@@ -9,7 +9,7 @@ initBootstrapJs = function() {
 	  $('[data-toggle="dropdown"]').dropdown();
 	  $('[data-toggle="tooltip"]').tooltip();
 	  $('[data-toggle="popover"]').popover();
-	}, 100);
+	}, 500);
 };
 
 var urlRegex =/(\b((https?|ftp|file):\/\/)?[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/igm;
