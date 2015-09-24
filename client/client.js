@@ -1,8 +1,13 @@
 
 Session.setDefault('brand-name', 'Loading...');
 
-Template.loginWrapper.onRendered(initBootstrapJs);
-Template.nav.onRendered(initBootstrapJs);
+//Template.loginWrapper.onRendered(initBootstrapJs);
+Template._loginButtonsLoggedOut.onRendered(initBootstrapJs);
+Template._loginButtonsLoggingIn.onRendered(initBootstrapJs);
+Template._loginButtonsLoggedIn.onRendered(initBootstrapJs);
+Template._loginButtonsLoggedOutDropdown.onRendered(initBootstrapJs);
+Template._loginButtonsLoggedInDropdown.onRendered(initBootstrapJs);
+//Template.nav.onRendered(initBootstrapJs);
 
 Template.nav.helpers({
 	unreadActivities: function() {
