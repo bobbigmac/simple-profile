@@ -39,25 +39,7 @@ Template.linkOptions.events({
 		var linkId = (this && this.link && this.link._id);
 		if(linkId) {
 			FS.Utility.eachFile(event, function(file) {
-				Images.insert(file, function (err, fileObj) {
-					if (err){
-						console.error(err);
-					} else {
-						var fileRecord = fileObj.getFileRecord();
-						if(fileRecord) {
-							var imageRecord = { _id: fileRecord._id };
-							Links.update(linkId, {
-								$addToSet: {
-									images: imageRecord
-								}
-							}, function() {
-								Meteor.setTimeout(function() {
-									sessionObjectProperty('displayedImage', linkId, getImageUrl(imageRecord));
-								}, 500);
-							});
-						}
-					}
-				});
+				uploadImage(imageFile, linkId);
 			});
 		}
 	}
