@@ -2,6 +2,16 @@ var settings = ((Meteor.settings && Meteor.settings.public) || {});
 
 Session.setDefault('brand-name', settings.brand||'Loading...');
 
+//TODO: Currently Chrome on ubuntu isn't playing nice with masonry layout (causing weird layout issues in panels after the first one)
+// -webkit-column-count bug: https://code.google.com/p/chromium/issues/detail?id=530260&thanks=530260&ts=1441908471
+// also see https://productforums.google.com/forum/#!topic/chrome/cSTmJmJLFVE
+var useMasonry = true;
+Handlebars.registerHelper('linkCardContainer', function() {
+	return useMasonry ? 'masonry-wall' : 'row';
+});
+Handlebars.registerHelper('linkCardLayout', function() {
+	return useMasonry ? 'masonry-brick masonry-no-break' : 'col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12';
+});
 Handlebars.registerHelper('bootstrapify', function() {
 	return {
 		//'class': 'input-group',

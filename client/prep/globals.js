@@ -1,7 +1,15 @@
+
+var bootstrapTimeout = false;
 initBootstrapJs = function() {
-  $('[data-toggle="dropdown"]').dropdown();
-  $('[data-toggle="tooltip"]').tooltip();
-  $('[data-toggle="popover"]').popover();
+	if(bootstrapTimeout) {
+		Meteor.clearTimeout(bootstrapTimeout);
+		bootstrapTimeout = false;
+	}
+	bootstrapTimeout = Meteor.setTimeout(function() {
+	  $('[data-toggle="dropdown"]').dropdown();
+	  $('[data-toggle="tooltip"]').tooltip();
+	  $('[data-toggle="popover"]').popover();
+	}, 100);
 };
 
 var urlRegex =/(\b((https?|ftp|file):\/\/)?[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/igm;
@@ -101,4 +109,38 @@ sessionObjectProperty = function(name, property, newValue) {
 		}
 		return obj[property];
 	}
+};
+
+removeImage = function(imageId, linkId) {
+	if(imageId && linkId) {
+		Links.update(linkId, {
+			$pull: {
+				images: { _id: imageId }
+			}
+		}, function(err, affected) {
+			if(!err) {
+				Images.remove({ _id: imageId });
+				sessionObjectProperty('displayedImage', linkId, false);
+			} else {
+				console.log('err', err);
+			}
+		});
+	}
+};
+
+getImageUrl = function(imageObj) {
+	var url = false;
+	if(typeof imageObj === 'object' && imageObj._id) {
+		if(imageObj.url) {
+			url = imageObj.url;
+		} else {
+			var fileRecord = Images.findOne(imageObj._id);
+			if(fileRecord) {
+				url = fileRecord.url();
+			}
+		}
+	} else {
+		url = ''+imageObj;
+	}
+	return url;
 };

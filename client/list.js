@@ -31,6 +31,38 @@ Template.addLinkForm.events({
 });
 
 Template.linkOptions.onRendered(initBootstrapJs);
+Template.linkOptions.events({
+	'click .link-upload': function(event, template) {
+		$(template.find('.link-file')).trigger('click');
+	},
+	'change .link-file': function(event, template) {
+		var linkId = (this && this.link && this.link._id);
+		if(linkId) {
+			FS.Utility.eachFile(event, function(file) {
+				Images.insert(file, function (err, fileObj) {
+					if (err){
+						console.error(err);
+					} else {
+						var fileRecord = fileObj.getFileRecord();
+						if(fileRecord) {
+							var imageRecord = { _id: fileRecord._id };
+							Links.update(linkId, {
+								$addToSet: {
+									images: imageRecord
+								}
+							}, function() {
+								Meteor.setTimeout(function() {
+									sessionObjectProperty('displayedImage', linkId, getImageUrl(imageRecord));
+								}, 500);
+							});
+						}
+					}
+				});
+			});
+		}
+	}
+});
+
 Template.list.onRendered(function() {
 	Session.set('confirm-remove-list', false);
 });

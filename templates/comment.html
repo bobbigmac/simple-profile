@@ -2,15 +2,27 @@
 
 <template name="linkOptions">
 	<span class="input-group-btn dropup">
+		
+		<input type="file" name="link-file" class="link-file" style="display:none;">
+
 	  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	    <span class="glyphicon glyphicon-option-horizontal"></span>
+	    <i class="glyphicon glyphicon-option-horizontal"></i>
 	  </button>
-	  <ul class="dropdown-menu pull-left" role="menu">
+	  <ul class="dropdown-menu pull-right" role="menu">
 			<li><a href="#" class="btn rescan-link"><i class="glyphicon glyphicon-repeat"></i> Rescan</a></li>
-			<li><a href="#" class="btn private-link"><span class="glyphicon glyphicon-{{#if link.private}}lock{{else}}globe{{/if}}"></span> 
+			<li><a href="#" class="btn private-link"><i class="glyphicon glyphicon-{{#if link.private}}lock{{else}}globe{{/if}}"></i> 
 				{{#if link.private}}Private{{else}}Public{{/if}}
 			</a></li>
-			<li><a href="#" class="btn remove-link"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+		  <li><a href="#" class="btn btn-link link-upload">
+		    <i class="glyphicon glyphicon-upload"></i> Add Image
+		  </a></li>
+		  {{#if link.images.length}}
+				<li><a href="'" class="btn btn-link remove-image">
+					<i class="glyphicon glyphicon-remove-circle"></i> Remove Image
+				</a></li>
+		  {{/if}}
+			<li role="seperator" class="divider"></li>
+			<li><a href="#" class="btn remove-link"><i class="glyphicon glyphicon-remove"></i> Delete</a></li>
 	  </ul>
 	</span>
 </template>
@@ -20,13 +32,13 @@
 		<div class="col-xs-12">
 			<form class="add-comment-form">
 		    <div class="input-group">
-		      {{#if editMode}}
-		      	{{> linkOptions}}
-					{{/if}}
 		      <input type="text" class="form-control add-comment-text" placeholder="What do you think?">
 		      <span class="input-group-btn">
 		        <button class="btn btn-default add-comment-button"><i class="glyphicon glyphicon-plus"></i> Add</button>
 		      </span>
+		      {{#if editMode}}
+		      	{{> linkOptions}}
+					{{/if}}
 		    </div>
 		  </form>
     </div>

@@ -72,17 +72,15 @@ Template.link.events({
 			}
 
 			if(update) {
-				Links.update({ _id: link._id }, update, function(err, affected) {
-					// if(affected) {
-					// 	console.log($(template.find('.btn')).parents('.link-card')[0]);
-					// 	var el = ($(template.find('.btn')).parents('.link-card')[0]);
-					// 	if(el) {
-					// 		el.scrollIntoView();
-					// 	}
-					// }
-				});
+				Links.update({ _id: link._id }, update);
 			}
 		}
+	},
+	'click .remove-image': function(event, template) {
+		var imageId = $(template.find('.showing')).attr('imageId');
+		//console.log('remove image', imageId, this.link._id);
+		removeImage(imageId, this.link._id);
+		return false;
 	}
 });
 
@@ -99,12 +97,16 @@ Template.imageList.events({
 			}
 		}
 	},
-	'load .image-list img.showable': function(event, template) {
-		var $img = template.$(template.find('img.showing'));
-		var $div = template.$(template.find('.image-list'));
-		var url = ''+this;
-		var height = $img.height();
-		$div.css({ minHeight: height });
+	'click .remove-image': function(event, template) {
+		var parentData = Template.parentData();
+		var imageId = $(template.find('.showing')).attr('imageId');
+
+		if(imageId && parentData && parentData.link && parentData.link._id) {
+			var linkId = parentData.link._id;
+
+			removeImage(imageId, linkId);
+		}
+		return false;
 	},
 	'click .image-list': function(event, template) {
 		var $img = template.$(template.find('img.showing'));
@@ -119,66 +121,48 @@ Template.imageList.events({
 
 		var nextImage = false;
 		if(goRight) {
-			nextImage = $img.nextAll('img.showable:first').attr('source');
+			nextImage = $img.nextAll('img.showable:first');
 		} else {
-			nextImage = $img.prevAll('img.showable:first').attr('source');
+			nextImage = $img.prevAll('img.showable:first');
 		}
 		
-		if(!nextImage) {
-			nextImage = $img.parents('.image-list').find('img.showable'+(goRight ? ':first' : ':last')).attr('source');
+		if(!nextImage || (nextImage && !nextImage.length)) {
+			nextImage = $img.parents('.image-list').find('img.showable'+(goRight ? ':first' : ':last'));
 		}
 
-		if(!nextImage) {
+		if(!nextImage || (nextImage && !nextImage.length)) {
 			//reset back to the beginning if I mess up.
-			nextImage = $img.nextAll('img.showable:first').attr('source');
+			nextImage = $img.nextAll('img.showable:first');
 		}
 
 		var data = Template.parentData();
 		if(data && data.link && data.link._id) {
-			sessionObjectProperty('displayedImage', data.link._id, nextImage);
+			var nextUrl = getImageUrl({ _id: nextImage.attr('imageId') });
+			sessionObjectProperty('displayedImage', data.link._id, nextUrl);
 		}
 	}
 });
 
 Template.imageList.helpers({
-	showIt: function(linkId, images) {
-		var url = (''+this);
-		var viewedLink = sessionObjectProperty('displayedImage', linkId);
-		if(!viewedLink) {
-			viewedLink = sessionObjectProperty('displayedImage', linkId, url);
-		}
-		showIt = (viewedLink === url ? url : false);
-
-		if(images && images.length > 1) {
-			var viewedIndex = images.indexOf(viewedLink);
-			var thisIndex = images.indexOf(url);
-			//console.log('viewedIndex', viewedIndex, thisIndex);
-			//
-			if(thisIndex === (viewedIndex + 1) || thisIndex === (viewedIndex - 1)) {
-				showIt = url;
-			}
-			if(viewedIndex === 0 && thisIndex === (images.length-1)) {
-				showIt = url;
-			}
-			if(thisIndex === 0 && viewedIndex === (images.length-1)) {
-				showIt = url;
-			}
-		}
-		return showIt;
+	imageUrl: function(linkId, images) {
+		return getImageUrl(this);
 	},
 	showing: function(linkId) {
-		var url = (''+this);
+		var url = getImageUrl(this);
 		var viewedLink = sessionObjectProperty('displayedImage', linkId);
 		if(!viewedLink) {
 			viewedLink = sessionObjectProperty('displayedImage', linkId, url);
 		}
-		return viewedLink === url;
+		return (viewedLink === url);
 	},
-	imagepos: function() {
-		var linkId = this._id;
-		var viewedLink = sessionObjectProperty('displayedImage', linkId);
-		return ((viewedLink && this.images && (this.images.indexOf(viewedLink)+1)) || 1);
-	}
+	// imagepos: function() {
+	// 	var linkId = this._id;
+	// 	var viewedLink = sessionObjectProperty('displayedImage', linkId);
+
+	// 	var template = Template.instance();
+	// 	console.log(template.find('.showable'));
+	// 	return ((viewedLink && this.images && (this.images.indexOf(viewedLink)+1)) || 1);
+	// }
 });
 
 Template.addCommentForm.events({

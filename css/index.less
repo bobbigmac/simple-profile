@@ -2,6 +2,10 @@
 	margin-top: 80px;
 }
 .link-card {
+	padding: 5px;
+	&.masonry-brick {
+		padding: 0px;
+	}
 	img {
 		width: 100%;
 	}
@@ -13,20 +17,28 @@
 		overflow: hidden;
 		text-align: center;
 		img {
-			max-width: 480px;
+			// max-width: 480px;
 			margin-left: auto;
 			margin-right: auto;
 		}
 		.image-pos {
 			font-size: 1em;
 			position: absolute;
-			bottom: 10px;
 			right: 10px;
+			bottom: 10px;
 			color: white;
 			text-shadow: 2px 2px 2px black;
 			i {
 				vertical-align: baseline;
 			}
+		}
+		.remove-image {
+			font-size: 1em;
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			color: white;
+			text-shadow: 2px 2px 2px black;
 		}
 	}
 	.remove-comment {
@@ -35,6 +47,9 @@
 			opacity: 0.6;
 		}
 	}
+}
+.panel-unpad-top {
+	padding-top: 0px;
 }
 .margin-a-bit {
 	margin: 5px 10px 10px 0px;
@@ -61,7 +76,7 @@
 	img {
 		display: none;
 		&.showing {
-			max-width: 480px;
+			// max-width: 480px;
 			margin-left: auto;
 			margin-right: auto;
 			display: block;
@@ -83,4 +98,16 @@
 .login-avatar {
 	margin-top: 5px;
 	margin-right: 5px;
+}
+.link-card .dropdown-menu > li > a {
+	text-align: left;
+	i {
+		margin-top: 2px;
+		float: right;
+		vertical-align: middle;
+	}
+}
+.dropup .dropdown-menu {
+	width: 180px;
+	z-index: 9999 !important;
 }

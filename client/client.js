@@ -1,7 +1,7 @@
 
 Session.setDefault('brand-name', 'Loading...');
 
-//Template.loginButtons.onRendered(initBootstrapJs);
+Template.loginWrapper.onRendered(initBootstrapJs);
 Template.nav.onRendered(initBootstrapJs);
 
 Template.nav.helpers({

@@ -71,6 +71,7 @@ Router.route('/', {
 			Meteor.subscribe('owner'),
 			Meteor.subscribe('lists'),
 			Meteor.subscribe('links'),
+			Meteor.subscribe('images')
 		];
 	},
 	data: function() {

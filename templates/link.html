@@ -3,23 +3,22 @@
 <template name="imageList">
 	<div class="image-list">
 		{{#each images}}
-			{{#if showIt ../_id ../images}}
-				<img src={{showIt ../_id ../images}} source="{{this}}" class="showable {{#if showing ../_id}}showing{{/if}}">
-			{{/if}}
+			<img src={{imageUrl}} imageId={{this._id}} class="showable {{#if showing ../_id}}showing{{/if}}">
 		{{/each}}
-		<span class="image-pos">
-			{{imagepos}} / {{images.length}}
-			<span class="glyphicon glyphicon-camera"></span>
-		</span>
 	</div>
+	{{#if editMode}}
+		<button class="btn btn-link remove-image">
+			<i class="glyphicon glyphicon-remove-circle"></i>
+		</button>
+	{{/if}}
 </template>
 
 <template name="link">
-	<div class="masonry-brick link-card {{#if link.archived}}link-archived{{/if}}">
+	<div class="{{linkCardLayout}} link-card {{#if link.archived}}link-archived{{/if}}">
 		<div class="panel {{#if link.archived}}panel-danger{{else}}panel-default{{/if}}">
 			{{#if link.images.length}}
 	    	<div class="panel-image no-select">
-					{{> imageList images=link.images url=link.url _id=link._id}}
+					{{> imageList images=link.images _id=link._id}}
 				</div>
 			{{else}}
 				{{#if link.image}}

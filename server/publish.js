@@ -44,6 +44,8 @@ Meteor.publish('activities', function(readUntil) {
 	return;
 });
 
+Meteor.publish("images", function(){ return Images.find(); });
+
 Meteor.publish('lists', function(listId) {
 	var filter = { public: true };
 	if(listId) {

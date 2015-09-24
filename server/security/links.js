@@ -15,6 +15,19 @@ var setArchiveActivity = function(activity, doc, fields, modifier) {
 	return activity;
 }
 
+var setImagesActivity = function(activity, doc, fields, modifier) {
+	if(modifier['$pull'] && modifier['$pull'].images) {
+		activity.action = 'remove';
+	}
+	if(modifier['$push'] && modifier['$push'].images) {
+		activity.action = 'add';
+	}
+	if(modifier['$addToSet'] && modifier['$addToSet'].images) {
+		activity.action = 'add';
+	}
+	return activity;
+}
+
 var setLinkEditMeta = function(activity, doc, fields, modifier) {
 	activity.meta = fields.join(',');
 	return activity;
@@ -28,6 +41,7 @@ Links.permit('insert')
 
 Links.permit('update')
 	.ifHasRole('admin')
+	.ownerIsLoggedInUser()
 	.onlyProps(['likes'])
 	.likesIsLoggedInUser()
 	.log(['_id', 'like', setLikeActivity])
@@ -35,8 +49,16 @@ Links.permit('update')
 
 Links.permit('update')
 	.ifHasRole('admin')
+	.ownerIsLoggedInUser()
 	.onlyProps(['archived', 'private'])
 	.log(['_id', 'archive', setArchiveActivity])
+	.apply();
+
+Links.permit('update')
+	.ifHasRole('admin')
+	.ownerIsLoggedInUser()
+	.onlyProps(['images'])
+	.log(['_id', 'image', setImagesActivity])
 	.apply();
 
 Links.permit('update')
