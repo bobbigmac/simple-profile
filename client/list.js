@@ -39,7 +39,7 @@ Template.linkOptions.events({
 		var linkId = (this && this.link && this.link._id);
 		if(linkId) {
 			FS.Utility.eachFile(event, function(file) {
-				uploadImage(imageFile, linkId);
+				uploadImage(file, linkId);
 			});
 		}
 	}
