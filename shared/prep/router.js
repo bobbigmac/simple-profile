@@ -102,7 +102,30 @@ Router.route('/', {
 
 		return listsCursor;
 	},
-  fastRender: true
+  fastRender: true,
+	//these seo/meta packages only function on the clientside, so need spiderable. That's pretty dumb.
+	//TODO: Need to write a package like inject-data for inject-meta on the initial page. Maybe meteorhacks:initial-data is usable.
+	// seo: {
+	// 	title: function() {
+	// 		var owner = Meteor.users.findOne({ 'roles': 'admin' });
+	// 		var brand = owner && ((owner.profile && owner.profile.brand) || owner.username) || 'Profile';
+	// 		console.log('brand', brand);
+	// 	}
+	// },
+  meta: {
+  	title: {
+  		name: 'title',
+  		itemprop: 'title',
+  		content: function() {
+				var owner = Meteor.users.findOne({ 'roles': 'admin' });
+				var brand = owner && ((owner.profile && owner.profile.brand) || owner.username) || 'Profile';
+				console.log('brand', brand);
+				return brand;
+  		}
+  	}
+  },
+  //doesn't work.
+  // where: ['client', 'server']
 });
 
 //TODO: This is going to need to some tweaking

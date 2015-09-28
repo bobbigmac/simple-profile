@@ -41,3 +41,4 @@ spacebars
 check
 cfs:standard-packages
 cfs:gridfs
+ostrio:iron-router-meta
