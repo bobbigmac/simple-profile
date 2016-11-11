@@ -119,7 +119,7 @@ Router.route('/', {
   		content: function() {
 				var owner = Meteor.users.findOne({ 'roles': 'admin' });
 				var brand = owner && ((owner.profile && owner.profile.brand) || owner.username) || 'Profile';
-				console.log('brand', brand);
+				//console.log('brand', brand);
 				return brand;
   		}
   	}

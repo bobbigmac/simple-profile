@@ -12,7 +12,7 @@ Lists.permit('insert')
 Lists.permit('update')
 	.ifHasRole('admin')
 	.ownerIsLoggedInUser()
-	.onlyProps(['public', 'name', 'description'])
+	.onlyProps(['public', 'name', 'description', 'order'])
 	.log([false, "edited", setListEditMeta])
 	.apply();
 

@@ -1,0 +1,24 @@
+{
+  "name": "simple-profile",
+  "version": "1.0.0",
+  "description": "Simple site to create and present a professional portfolio/profile from lists of links showing developed/designed products.",
+  "main": "index.js",
+  "dependencies": {
+    "babel-runtime": "^6.18.0",
+    "bcrypt": "^0.8.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobbigmac/simple-profile.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bobbigmac/simple-profile/issues"
+  },
+  "homepage": "https://github.com/bobbigmac/simple-profile#readme"
+}

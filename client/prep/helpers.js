@@ -74,7 +74,7 @@ moment.fn.fromNowOrNow = function (a) {
 
 Handlebars.registerHelper('liveMomentAgo', function(date) {
 	Chronos.liveUpdate(20000);
-	return Chronos.liveMoment(date).fromNowOrNow();
+	return Chronos.liveMoment(date).fromNow();
 });
 
 Handlebars.registerHelper('either', function(a, b) {
