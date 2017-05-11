@@ -166,5 +166,5 @@ getImageUrl = function(imageObj) {
 	} else {
 		url = ''+imageObj;
 	}
-	return url;
+	return url;// && url.replace('http://', 'https://');
 };

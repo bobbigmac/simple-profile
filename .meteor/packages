@@ -44,3 +44,4 @@ ostrio:iron-router-meta
 standard-minifier-css
 standard-minifier-js
 shell-server
+force-ssl
